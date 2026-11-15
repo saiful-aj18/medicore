@@ -19,6 +19,11 @@ npm run build
 npm run start
 ```
 
+> If `npm run build` crashes with "JavaScript heap out of memory" on a
+> low-RAM PC, the build script already raises Node's heap to 3 GB. You
+> can also run it manually in PowerShell:
+> `$env:NODE_OPTIONS="--max-old-space-size=3072"; npm run build`
+
 ## Database — MongoDB (real, shared by everyone)
 
 All hospital data (patients, doctors, appointments, medicines, emergency
