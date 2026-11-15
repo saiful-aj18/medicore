@@ -1,49 +1,105 @@
-# MediCare — Complete Hospital Website
+<div align="center">
 
-A complete hospital website built with **Next.js (App Router) + React +
-lucide-react**: a public landing page, patient booking with payment, staff
-login with JWT security, the full OPS dashboard, and an AI chatbot.
-Demo data lives in `src/data/` — swap it for a real database when ready.
+# 🏥 MediCare — Complete Hospital Website
 
-## Run it
+### A full hospital website: public landing page, online patient booking with payment,
+### staff login, and a complete OPS dashboard — all in one Next.js app.
+
+[![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?logo=react)](https://react.dev/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb)](https://www.mongodb.com/)
+[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-black?logo=vercel)](https://medicare73.vercel.app/)
+[![GSAP](https://img.shields.io/badge/Animations-GSAP-0AE448?logo=greensock)](https://gsap.com/)
+[![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+
+**🌐 Live demo: [medicare73.vercel.app](https://medicare73.vercel.app/)**
+
+[✨ Features](#-features) · [🚀 Quick start](#-quick-start) · [🗄️ Database](#️-database--mongodb) · [🔌 API](#-api) · [🔐 Demo logins](#-demo-logins-staff)
+
+</div>
+
+---
+
+## ✨ Features
+
+### 🌍 Public website (no login needed)
+| | |
+|---|---|
+| **Landing page** | Hero with banner photo, rated banner (★★★★★ 4.9/5), services, how booking works, doctors with photos, health tips, testimonials, FAQ, emergency banner — with GSAP scroll animations |
+| **Patient booking** | Department → doctor (fee shown) → date & time → details → **payment (bKash / Nagad / Card / Cash)** → booking ID + status check by ID, phone or name |
+| **AI chatbot** | Floating **“Ask MediCare”** assistant — answers booking, fees, hours, doctors & emergency questions instantly |
+
+### 🛡️ OPS dashboard (staff login required)
+| | |
+|---|---|
+| **Dashboard** | Live stats, bed occupancy, AI insights, alerts, charts |
+| **Patients** | Search + filter, admit a patient |
+| **Doctors** | Doctor cards with photos, on/off-duty toggle |
+| **Appointments** | Schedule, complete / cancel — online bookings show as “Online” |
+| **Beds** | Ward occupancy, bed grid, change any bed's status |
+| **Emergency** | Triage alerts, case status updates |
+| **Pharmacy** | Medicine stock, low / critical alerts, reorder (+100) |
+| **Analytics & Settings** | Admissions vs discharges, department ranking, profile & notifications |
+
+> 📱 **Fully mobile responsive** — landing, booking, login and every OPS page stack cleanly on a phone with zero horizontal overflow. The OPS sidebar becomes a slide-in drawer, so staff and patients can use everything from a phone.
+>
+> 🌙 **Dark mode, global search** — the dashboard has a working dark mode (remembered) and global search that jumps straight to the right patient.
+
+---
+
+## 🛠️ Tech stack
+
+| Layer | Technology |
+|---|---|
+| Framework | **Next.js 15** (App Router) + **React 19** |
+| Database | **MongoDB** via **Mongoose** (auto-seed, demo-mode fallback) |
+| Auth | **JWT** (httpOnly cookie, 8h, `jose`) + **bcrypt** passwords, rate-limited login |
+| Payments | **SSLCommerz** hook (demo mode without credentials, sandbox ready) |
+| Animations | **GSAP** + ScrollTrigger |
+| Analytics | **Vercel Analytics** |
+| Styling | Custom CSS (no Tailwind) · `lucide-react` icons |
+| Hosting | **Vercel** (auto-deploy from `main`) |
+
+---
+
+## 🚀 Quick start
 
 ```bash
 npm install
-npm run dev
+npm run dev          # → http://localhost:3000
 ```
-
-Open http://localhost:3000 (landing page)
 
 ```bash
-npm run build
-npm run start
+npm run build        # check everything compiles
+npm run start        # production server
 ```
 
-> If `npm run build` crashes with "JavaScript heap out of memory" on a
-> low-RAM PC, the build script already raises Node's heap to 3 GB. You
-> can also run it manually in PowerShell:
-> `$env:NODE_OPTIONS="--max-old-space-size=3072"; npm run build`
+> 💡 **Low-RAM PC?** If `npm run build` crashes with “JavaScript heap out of memory”,
+> the build script already raises Node's heap to 3 GB. Or build in the cloud with Vercel —
+> `vercel --prod` builds on Vercel's machines, no local RAM needed.
 
-## Database — MongoDB (real, shared by everyone)
+---
 
-All hospital data (patients, doctors, appointments, medicines, emergency
-cases, beds, staff logins) lives in **MongoDB via Mongoose**. A booking
-made on `/book` appears in OPS Appointments for every staff member, on
-any device. Without a database the app still works in **demo mode**
-(seed data, saves only in that browser).
+## 🗄️ Database — MongoDB
 
-### Set it up (free, 5 minutes — MongoDB Atlas)
+All hospital data — patients, doctors, appointments, medicines, emergency cases,
+beds, staff logins — lives in **MongoDB via Mongoose**. A booking made on `/book`
+appears in OPS Appointments for every staff member, on any device.
 
-1. Create a free account at https://cloud.mongodb.com and a free **M0**
-   cluster.
-2. **Database Access** → Add a database user (username + password).
-3. **Network Access** → Add IP `0.0.0.0/0` (so Vercel can reach it).
+Without a database the app still works in **demo mode** (seed data, saves only in
+that browser). Every API response tells you which mode it is: `{ mode: "db" | "demo" }`.
+
+### Set it up (free, ~5 minutes — MongoDB Atlas)
+
+1. Create a free account at [cloud.mongodb.com](https://cloud.mongodb.com) and a free **M0** cluster.
+2. **Database Access** → add a database user (username + password).
+3. **Network Access** → add IP `0.0.0.0/0` (so Vercel can reach it).
 4. **Database** → Connect → Drivers → copy the connection string.
 5. Create `.env.local` in the project root (copy `.env.example`):
 
 ```env
 MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/medicare
-JWT_SECRET=<random 32+ chars, see below>
+JWT_SECRET=<random 32+ chars>
 ```
 
 Generate the secret:
@@ -58,100 +114,72 @@ node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
 npm run db:seed
 ```
 
-### Terminal commands (DB)
-
-| Command | What it does |
-|---|---|
-| `npm run db:seed` | Fill an empty database with the demo data (patients, doctors, appointments, medicines, emergency cases, beds, staff logins) |
-| `npm run dev` | Run locally with the database |
-| `npm run build` | Check everything compiles before deploy |
-
 ### Deploy to Vercel
 
 ```bash
 npm install -g vercel
 vercel login
-vercel
 vercel --prod
 ```
 
-Or push to GitHub and Import Project on vercel.com. In the Vercel
-dashboard add the same two environment variables:
+Or push to GitHub and **Import Project** on [vercel.com](https://vercel.com).
+In the Vercel dashboard, add the same environment variables:
 
-- `MONGODB_URI` — the Atlas connection string above
-- `JWT_SECRET` — the random secret above
+| Variable | What it is |
+|---|---|
+| `MONGODB_URI` | The Atlas connection string above |
+| `JWT_SECRET` | The random secret above |
+| `SSLCOMMERZ_STORE_ID` / `SSLCOMMERZ_STORE_PASSWORD` / `SSLCOMMERZ_IS_SANDBOX` | *(Optional)* for live payments |
+| `NEXT_PUBLIC_SITE_URL` | Your production URL, e.g. `https://medicare73.vercel.app` |
 
-(Optional: `SSLCOMMERZ_STORE_ID` / `SSLCOMMERZ_STORE_PASSWORD` /
-`SSLCOMMERZ_IS_SANDBOX` for live payments.)
+---
 
-## API (all under `/api`)
+## 🔌 API
+
+All routes live under `/api`:
 
 | Route | What it does |
 |---|---|
-| `GET/POST /api/patients` | List / admit a patient |
-| `GET/PATCH /api/doctors` | List / toggle on-off duty |
-| `GET/POST/PATCH /api/appointments` | List / book / complete-cancel; `?search=` finds a booking by ID, phone or name |
-| `GET/PATCH /api/medicines` | List / reorder (+100 units) |
-| `GET/PATCH /api/emergency` | List / update case status |
-| `GET/PATCH /api/beds` | Wards + bed grid / change a bed's status |
+| `GET / POST /api/patients` | List / admit a patient |
+| `GET / PATCH /api/doctors` | List / toggle on-off duty |
+| `GET / POST / PATCH /api/appointments` | List / book / complete-cancel · `?search=` finds a booking by ID, phone or name |
+| `GET / PATCH /api/medicines` | List / reorder (+100 units) |
+| `GET / PATCH /api/emergency` | List / update case status |
+| `GET / PATCH /api/beds` | Wards + bed grid / change a bed's status |
 | `POST /api/seed` | Seed an empty database |
 | `POST /api/auth/login` | Staff login (checks MongoDB users first, demo accounts as fallback) |
+| `GET /api/auth/me` | Who is signed in (name, email, role) |
 | `POST /api/payments` | Demo payment gateway (SSLCommerz hook for live) |
 
-Every GET returns `{ mode: "db" | "demo", ... }` — in demo mode the
-same seed data is returned so the site works with no database at all.
+---
 
-## Demo logins (staff)
+## 🔐 Demo logins (staff)
 
 | Role | Email | Password |
 |---|---|---|
-| Admin | admin@medicare.hospital | admin123 |
-| Doctor | doctor@medicare.hospital | doctor123 |
+| 👨‍💼 Admin | `admin@medicare.hospital` | `admin123` |
+| 👨‍⚕️ Doctor | `doctor@medicare.hospital` | `doctor123` |
 
-Change these in `src/lib/users.js` and set `JWT_SECRET` in `.env.local`
-(copy `.env.example`) before going live.
+> ⚠️ These are **demo** accounts. Change them in the database (the `staffusers`
+> collection) and set a real `JWT_SECRET` in Vercel before giving the site to a
+> real hospital.
 
-## Pages
+---
 
-| Route | What it does |
-|---|---|
-| `/` | **Landing page** — hero, services, how booking works, doctors, health tips, testimonials, FAQ, emergency banner, contact/footer + AI chat |
-| `/book` | **Public patient booking** — no login: department → doctor (fee shown) → date & time → details → **payment (bKash / Nagad / Card / Cash)** → booking ID + status check |
-| `/login` | Staff login (admin / doctor), bcrypt passwords, JWT cookie, rate-limited |
-| `/dashboard` | OPS dashboard (login required) — hero, AI insights, stats, charts, alerts |
-| `/patients` | Search + filter, admit a patient (saved in browser) |
-| `/doctors` | Doctor cards, filters, on/off-duty toggle |
-| `/appointments` | Schedule, complete/cancel; online bookings from `/book` show as “Online” |
-| `/beds` | Ward occupancy, bed grid, summary |
-| `/emergency` | Alerts, triage guidance, case status |
-| `/pharmacy` | Medicine stock, low/critical stock, reorder |
-| `/analytics` | Admissions vs discharges, department ranking |
-| `/settings` | Profile, hospital details, notification toggles |
+## 🔒 Security
 
-## What's inside
+- `src/middleware.js` redirects every OPS page to `/login` without a valid JWT
+  (httpOnly cookie, 8h, HS256 via `jose`)
+- Passwords are **bcrypt hashes**, never plaintext
+- Login is **rate-limited** (5 failed attempts / 15 min)
+- Security headers in `next.config.mjs` (nosniff, frame deny, referrer, permissions, COOP)
+- Payment is never trusted from the client alone — `POST /api/payments` is the
+  gateway entry point; demo mode simulates a successful payment with a
+  transaction ID, live mode uses SSLCommerz
 
-- **Landing page** — everything a hospital website needs: services,
-  doctors, fees, health tips, testimonials, FAQ, emergency contact.
-- **Payments** — booking checkout with bKash, Nagad, Card or Cash at
-  hospital. `POST /api/payments` is the gateway entry point: **demo mode**
-  (no credentials) simulates a successful payment with a transaction ID;
-  set `SSLCOMMERZ_STORE_ID` / `SSLCOMMERZ_STORE_PASSWORD` /
-  `SSLCOMMERZ_IS_SANDBOX` in `.env.local` for live SSLCommerz — the route
-  documents where the real init call goes, and payment is never trusted
-  from the client alone.
-- **Security** — `src/middleware.js` redirects every OPS page to `/login`
-  without a valid JWT (httpOnly cookie, 8h, HS256 via `jose`); passwords
-  are bcrypt hashes, never plaintext; login is rate-limited (5 failed
-  attempts / 15 min); security headers in `next.config.mjs`
-  (nosniff, frame deny, referrer, permissions, COOP).
-- **AI live chatbot** — floating “Ask MediCare” widget on the landing and
-  booking pages. Answers booking, fees, hours, doctors, departments and
-  emergency questions instantly, with quick-reply chips. Rule-based on a
-  hospital knowledge base (no API key needed); swap `reply()` in
-  `src/components/ChatWidget.js` for a real LLM API when ready.
-- **Working navigation, dark mode, global search, responsive** — same as v2/v3. **Fully mobile responsive**: landing, booking, login and all OPS pages stack cleanly on a phone with zero horizontal overflow; the OPS sidebar becomes a slide-in drawer (☰ button in the top bar) and the landing page gets a mobile menu, so staff and patients can use everything from a phone.
+---
 
-## Structure
+## 📁 Project structure
 
 ```
 src/
@@ -164,11 +192,10 @@ src/
     patients/ doctors/ appointments/ beds/
     emergency/ pharmacy/ analytics/ settings/
     api/
-      auth/login/      # bcrypt + JWT + rate limit
-      auth/logout/
+      auth/            # login / logout / me (bcrypt + JWT + rate limit)
       payments/        # demo gateway / SSLCommerz hook
   components/
-    DashboardShell.js, Sidebar.js (with logout), TopBar.js
+    DashboardShell.js, Sidebar.js, TopBar.js
     ChatWidget.js      # AI assistant
     HeroCard.js, DoctorArt.js, StatCards.js, AdmissionChart.js,
     BedOccupancy.js, DepartmentPerformance.js, EmergencyAlerts.js,
@@ -180,6 +207,7 @@ src/
     models.js          # Patient, Doctor, Appointment, Medicine,
                        #   EmergencyCase, Ward, StaffUser
     seed.js            # auto-seed an empty DB from src/data/hospital.js
+    landing-animations.js   # GSAP hero + scroll animations
   middleware.js        # protects all OPS routes
   data/
     dashboard.js, hospital.js   # seed data + demo-mode fallback
@@ -187,12 +215,18 @@ scripts/
   seed.mjs             # npm run db:seed
 ```
 
-## Next step for a real hospital
+---
 
-1. ~~Set `JWT_SECRET` and replace the demo users~~ — **done in v6**:
-   staff accounts now live in MongoDB (seeded with the demo logins).
-   Change them in the database, or add new staff in the `staffusers`
-   collection, and set a real `JWT_SECRET` in Vercel.
-2. Add SSLCommerz merchant credentials to `.env.local` / Vercel for live
-   payments.
-3. Deploy to Vercel — the client then opens one link; nothing to install.
+## ✅ Next steps for a real hospital
+
+1. Change the demo staff accounts in MongoDB and set a real `JWT_SECRET` in Vercel.
+2. Add SSLCommerz **merchant** credentials for live payments (sandbox keys are demo only).
+3. Deploy to Vercel — the hospital then opens one link; nothing to install.
+
+---
+
+<div align="center">
+
+**Built with ❤️ using Next.js · Live at [medicare73.vercel.app](https://medicare73.vercel.app/)**
+
+</div>
