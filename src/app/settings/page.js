@@ -14,8 +14,8 @@ const NOTIFICATIONS = [
 export default function SettingsPage() {
   const [name, setName] = useState("Dr. Johnson");
   const [role, setRole] = useState("Administrator");
-  const [email, setEmail] = useState("dr.johnson@medicore.hospital");
-  const [hospital, setHospital] = useState("MediCore General Hospital");
+  const [email, setEmail] = useState("dr.johnson@medicare.hospital");
+  const [hospital, setHospital] = useState("MediCare General Hospital");
   const [toggles, setToggles] = useState({ icu: true, stock: true, emergency: true, followup: false });
   const [saved, setSaved] = useState("");
 

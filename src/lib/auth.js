@@ -1,12 +1,12 @@
 import { SignJWT, jwtVerify } from "jose";
 
-export const COOKIE_NAME = "medicore_token";
+export const COOKIE_NAME = "medicare_token";
 
 function secret() {
   // Set JWT_SECRET in .env.local (32+ random chars) for production.
   // The fallback below is for demo only — change it before going live.
   return new TextEncoder().encode(
-    process.env.JWT_SECRET || "medicore-dev-secret-change-me-before-production"
+    process.env.JWT_SECRET || "medicare-dev-secret-change-me-before-production"
   );
 }
 

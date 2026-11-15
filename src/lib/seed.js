@@ -98,6 +98,18 @@ export async function ensureSeeded() {
     );
   }
 
+  // Brand rename (MediCore -> MediCare, 2026-11-15): move the two demo
+  // staff accounts to the new email domain if they still have the old
+  // one. No-op once renamed; safe to run on every call.
+  await StaffUser.updateOne(
+    { email: "admin@medicore.hospital" },
+    { $set: { email: "admin@medicare.hospital" } }
+  );
+  await StaffUser.updateOne(
+    { email: "doctor@medicore.hospital" },
+    { $set: { email: "doctor@medicare.hospital" } }
+  );
+
   return true;
 }
 

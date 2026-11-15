@@ -1,4 +1,4 @@
-// Seed the MongoDB database with MediCore demo data.
+// Seed the MongoDB database with MediCare demo data.
 // Usage:
 //   MONGODB_URI="mongodb+srv://..." npm run db:seed
 //   # or put MONGODB_URI in .env.local first, then:
@@ -25,7 +25,7 @@ if (!process.env.MONGODB_URI) {
 
 if (!process.env.MONGODB_URI) {
   console.error("MONGODB_URI is not set. Put it in .env.local or pass it inline:");
-  console.error('  MONGODB_URI="mongodb+srv://<user>:<pass>@<cluster>/medicore" npm run db:seed');
+  console.error('  MONGODB_URI="mongodb+srv://<user>:<pass>@<cluster>/medicare" npm run db:seed');
   process.exit(1);
 }
 

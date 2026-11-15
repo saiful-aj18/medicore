@@ -52,7 +52,7 @@ export default function BookPage() {
 
   useEffect(() => {
     try {
-      setMyBookings(JSON.parse(localStorage.getItem("medicore-bookings") || "[]"));
+      setMyBookings(JSON.parse(localStorage.getItem("medicare-bookings") || "[]"));
     } catch { /* ignore */ }
   }, []);
 
@@ -159,8 +159,8 @@ export default function BookPage() {
     } catch { /* demo fallback below */ }
     if (!savedToDb) {
       try {
-        const saved = JSON.parse(localStorage.getItem("medicore-bookings") || "[]");
-        localStorage.setItem("medicore-bookings", JSON.stringify([booking, ...saved]));
+        const saved = JSON.parse(localStorage.getItem("medicare-bookings") || "[]");
+        localStorage.setItem("medicare-bookings", JSON.stringify([booking, ...saved]));
       } catch { /* ignore */ }
     }
     setMyBookings((cur) => [booking, ...cur]);
@@ -212,7 +212,7 @@ export default function BookPage() {
         <Link href="/book" className="book-brand">
           <span className="book-logo">M</span>
           <span>
-            <strong>MediCore</strong>
+            <strong>MediCare</strong>
             <small>General Hospital</small>
           </span>
         </Link>
@@ -412,7 +412,7 @@ export default function BookPage() {
       </main>
 
       <footer className="book-footer">
-        MediCore General Hospital · Emergency? Call the hospital directly — this page is for routine appointments only.
+        MediCare General Hospital · Emergency? Call the hospital directly — this page is for routine appointments only.
       </footer>
       <ChatWidget />
     </div>

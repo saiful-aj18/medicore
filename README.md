@@ -1,4 +1,4 @@
-# MediCore — Complete Hospital Website
+# MediCare — Complete Hospital Website
 
 A complete hospital website built with **Next.js (App Router) + React +
 lucide-react**: a public landing page, patient booking with payment, staff
@@ -42,7 +42,7 @@ any device. Without a database the app still works in **demo mode**
 5. Create `.env.local` in the project root (copy `.env.example`):
 
 ```env
-MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/medicore
+MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/medicare
 JWT_SECRET=<random 32+ chars, see below>
 ```
 
@@ -105,8 +105,8 @@ same seed data is returned so the site works with no database at all.
 
 | Role | Email | Password |
 |---|---|---|
-| Admin | admin@medicore.hospital | admin123 |
-| Doctor | doctor@medicore.hospital | doctor123 |
+| Admin | admin@medicare.hospital | admin123 |
+| Doctor | doctor@medicare.hospital | doctor123 |
 
 Change these in `src/lib/users.js` and set `JWT_SECRET` in `.env.local`
 (copy `.env.example`) before going live.
@@ -144,7 +144,7 @@ Change these in `src/lib/users.js` and set `JWT_SECRET` in `.env.local`
   are bcrypt hashes, never plaintext; login is rate-limited (5 failed
   attempts / 15 min); security headers in `next.config.mjs`
   (nosniff, frame deny, referrer, permissions, COOP).
-- **AI live chatbot** — floating “Ask MediCore” widget on the landing and
+- **AI live chatbot** — floating “Ask MediCare” widget on the landing and
   booking pages. Answers booking, fees, hours, doctors, departments and
   emergency questions instantly, with quick-reply chips. Rule-based on a
   hospital knowledge base (no API key needed); swap `reply()` in

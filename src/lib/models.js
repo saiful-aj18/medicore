@@ -1,4 +1,4 @@
-// Mongoose models for MediCore. One collection per hospital area.
+// Mongoose models for MediCare. One collection per hospital area.
 // `mongoose.models.X ||` keeps Next.js hot-reload from redefining models.
 
 import mongoose from "mongoose";

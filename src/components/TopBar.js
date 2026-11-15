@@ -12,7 +12,7 @@ export default function TopBar({ onMenuClick }) {
   // Apply dark mode on the <html> element and remember the choice.
   useEffect(() => {
     try {
-      if (localStorage.getItem("medicore-theme") === "dark") setDark(true);
+      if (localStorage.getItem("medicare-theme") === "dark") setDark(true);
     } catch {
       /* storage unavailable — stay light */
     }
@@ -21,7 +21,7 @@ export default function TopBar({ onMenuClick }) {
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
     try {
-      localStorage.setItem("medicore-theme", dark ? "dark" : "light");
+      localStorage.setItem("medicare-theme", dark ? "dark" : "light");
     } catch {
       /* ignore */
     }

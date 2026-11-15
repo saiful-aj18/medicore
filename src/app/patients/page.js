@@ -39,7 +39,7 @@ function PatientsContent() {
       })
       .catch(() => {
         try {
-          const saved = JSON.parse(localStorage.getItem("medicore-added-patients") || "[]");
+          const saved = JSON.parse(localStorage.getItem("medicare-added-patients") || "[]");
           if (saved.length && !cancelled) setList((cur) => [...saved, ...cur]);
         } catch { /* ignore */ }
       });
@@ -91,8 +91,8 @@ function PatientsContent() {
     setList((cur) => [next, ...cur]);
     if (!saved) {
       try {
-        const old = JSON.parse(localStorage.getItem("medicore-added-patients") || "[]");
-        localStorage.setItem("medicore-added-patients", JSON.stringify([next, ...old]));
+        const old = JSON.parse(localStorage.getItem("medicare-added-patients") || "[]");
+        localStorage.setItem("medicare-added-patients", JSON.stringify([next, ...old]));
       } catch { /* ignore */ }
     }
     setShowForm(false);

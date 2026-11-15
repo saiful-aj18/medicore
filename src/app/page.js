@@ -38,7 +38,7 @@ const SERVICES = [
 
 const TIPS = [
   { tag: "Prevention", title: "Dengue season: check platelets early", text: "Fever for more than 2 days? Get a CBC test and drink plenty of fluids. Come in early — it saves lives." },
-  { tag: "Heart health", title: "Know your blood pressure numbers", text: "High blood pressure has no symptoms. A 5-minute check at MediCore can catch it years early." },
+  { tag: "Heart health", title: "Know your blood pressure numbers", text: "High blood pressure has no symptoms. A 5-minute check at MediCare can catch it years early." },
   { tag: "Diabetes", title: "Sugar under control, life under control", text: "Regular sugar checks and a simple food routine keep diabetes from damaging eyes, kidneys and feet." },
 ];
 
@@ -73,7 +73,7 @@ export default function LandingPage() {
       <header className="landing-nav">
         <Link href="/" className="book-brand">
           <span className="book-logo">M</span>
-          <span><strong>MediCore</strong><small>General Hospital</small></span>
+          <span><strong>MediCare</strong><small>General Hospital</small></span>
         </Link>
         <nav className="landing-links">
           <a href="#services">Services</a>
@@ -118,7 +118,7 @@ export default function LandingPage() {
           </p>
         </div>
         <div className="card landing-hero-card">
-          <h2>Today at MediCore</h2>
+          <h2>Today at MediCare</h2>
           <div className="landing-mini-stats">
             <div><b>{stats[0].value}</b><span>Total patients</span></div>
             <div><b>{stats[1].value}</b><span>Beds available</span></div>
@@ -258,7 +258,7 @@ export default function LandingPage() {
 
       <footer id="contact" className="landing-footer">
         <div>
-          <h3>MediCore General Hospital</h3>
+          <h3>MediCare General Hospital</h3>
           <p><MapPin size={14} style={{ verticalAlign: "-2px" }} /> Dhaka, Bangladesh</p>
           <p><Phone size={14} style={{ verticalAlign: "-2px" }} /> +880 1XXX-XXXXXX · Emergency 24/7</p>
           <p><Clock size={14} style={{ verticalAlign: "-2px" }} /> Appointments: 8 AM – 10 PM, every day</p>
@@ -274,7 +274,7 @@ export default function LandingPage() {
           <p>Cardiology · Neurology · Orthopedics</p>
           <p>Pediatrics · General Medicine · Emergency</p>
         </div>
-        <p className="landing-copy">© 2026 MediCore General Hospital. For emergencies, come straight to the hospital — do not wait for an online reply. <Activity size={13} style={{ verticalAlign: "-2px" }} /></p>
+        <p className="landing-copy">© 2026 MediCare General Hospital. For emergencies, come straight to the hospital — do not wait for an online reply. <Activity size={13} style={{ verticalAlign: "-2px" }} /></p>
       </footer>
 
       <ChatWidget />

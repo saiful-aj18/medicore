@@ -7,9 +7,9 @@ import mongoose from "mongoose";
 
 const uri = process.env.MONGODB_URI;
 
-let cached = globalThis.__medicoreMongoose;
+let cached = globalThis.__medicareMongoose;
 if (!cached) {
-  cached = globalThis.__medicoreMongoose = { conn: null, promise: null };
+  cached = globalThis.__medicareMongoose = { conn: null, promise: null };
 }
 
 export function isDbConfigured() {
@@ -32,7 +32,7 @@ export async function dbConnect() {
     return cached.conn;
   } catch (err) {
     cached.promise = null;
-    console.error("[medicore] MongoDB connection failed:", err.message);
+    console.error("[medicare] MongoDB connection failed:", err.message);
     return null;
   }
 }

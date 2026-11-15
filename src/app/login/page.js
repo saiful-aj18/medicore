@@ -39,10 +39,10 @@ function LoginForm() {
 
   function fillDemo(role) {
     if (role === "admin") {
-      setEmail("admin@medicore.hospital");
+      setEmail("admin@medicare.hospital");
       setPassword("admin123");
     } else {
-      setEmail("doctor@medicore.hospital");
+      setEmail("doctor@medicare.hospital");
       setPassword("doctor123");
     }
     setError("");
@@ -54,7 +54,7 @@ function LoginForm() {
         <Link href="/" className="book-brand" style={{ justifyContent: "center" }}>
           <span className="book-logo">M</span>
           <span style={{ textAlign: "left" }}>
-            <strong>MediCore</strong>
+            <strong>MediCare</strong>
             <small>General Hospital</small>
           </span>
         </Link>
@@ -65,7 +65,7 @@ function LoginForm() {
           <div className="form-grid" style={{ gridTemplateColumns: "1fr" }}>
             <div className="field">
               <label htmlFor="login-email">Email</label>
-              <input id="login-email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@medicore.hospital" />
+              <input id="login-email" type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="admin@medicare.hospital" />
             </div>
             <div className="field">
               <label htmlFor="login-password">Password</label>

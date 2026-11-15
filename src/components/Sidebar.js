@@ -67,7 +67,7 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
       <aside className={`sidebar${open ? " open" : ""}`}>
       <div className="brand">
         <Link href="/" onClick={onClose}>
-          <h1>MediCore</h1>
+          <h1>MediCare</h1>
           <p>Hospital OPS</p>
         </Link>
       </div>

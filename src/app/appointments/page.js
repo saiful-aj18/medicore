@@ -32,7 +32,7 @@ export default function AppointmentsPage() {
           // Demo mode: also merge this browser's online bookings.
           if (data.mode === "demo") {
             try {
-              const saved = JSON.parse(localStorage.getItem("medicore-bookings") || "[]");
+              const saved = JSON.parse(localStorage.getItem("medicare-bookings") || "[]");
               const local = saved.map((b) => ({
                 time: b.time,
                 patient: `${b.patient} (Online)`,
@@ -50,7 +50,7 @@ export default function AppointmentsPage() {
       })
       .catch(() => {
         try {
-          const saved = JSON.parse(localStorage.getItem("medicore-bookings") || "[]");
+          const saved = JSON.parse(localStorage.getItem("medicare-bookings") || "[]");
           if (saved.length && !cancelled) {
             const online = saved.map((b) => ({
               time: b.time,

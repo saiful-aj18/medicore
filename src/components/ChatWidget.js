@@ -28,9 +28,9 @@ function reply(text) {
   if (/(neurology|neuro|brain|migraine)/.test(t)) return "Neurology: Dr. Emily Davis (11 yrs, ৳800) and Dr. David Kim. They handle migraine, stroke follow-up and nerve problems.";
   if (/(pediatric|child|baby|kid)/.test(t)) return "Pediatrics: Dr. Sarah Chen (8 yrs, ৳600) — child check-ups, fever, dengue care and vaccinations.";
   if (/(ortho|bone|fracture|knee)/.test(t)) return "Orthopedics: Dr. Michael Brown (16 yrs, ৳700) — fractures, knee replacement follow-up and physiotherapy.";
-  if (/(location|address|where|dhaka)/.test(t)) return "MediCore General Hospital is in Dhaka, Bangladesh. Come to the reception with your booking ID, or call us for directions.";
+  if (/(location|address|where|dhaka)/.test(t)) return "MediCare General Hospital is in Dhaka, Bangladesh. Come to the reception with your booking ID, or call us for directions.";
   if (/(cancel|change|reschedule)/.test(t)) return "To cancel or change an appointment, call the hospital with your booking ID, or check your booking status on the booking page and contact reception. Online bookings can be cancelled from the Appointments list by staff.";
-  if (/(hi|hello|assalam|salam|hey)\b/.test(t)) return "Assalamu Alaikum! I am MediCore's assistant. I can help you book an appointment, find a doctor, check fees and hours, or guide you in an emergency. What do you need?";
+  if (/(hi|hello|assalam|salam|hey)\b/.test(t)) return "Assalamu Alaikum! I am MediCare's assistant. I can help you book an appointment, find a doctor, check fees and hours, or guide you in an emergency. What do you need?";
   if (/(thank|thanks|shukran)/.test(t)) return "You're welcome! Get well soon — and remember, for anything urgent, come straight to Emergency.";
   return "I can help with booking an appointment, doctor fees, opening hours, departments, and emergency help. Try one of the quick options below, or ask me in your own words.";
 }
@@ -38,7 +38,7 @@ function reply(text) {
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { from: "bot", text: "Assalamu Alaikum! I am MediCore's assistant. Need a doctor, a booking, or the fees? Ask me anything." },
+    { from: "bot", text: "Assalamu Alaikum! I am MediCare's assistant. Need a doctor, a booking, or the fees? Ask me anything." },
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
@@ -63,17 +63,17 @@ export default function ChatWidget() {
   return (
     <>
       {!open && (
-        <button type="button" className="chat-fab" onClick={() => setOpen(true)} aria-label="Chat with MediCore assistant">
+        <button type="button" className="chat-fab" onClick={() => setOpen(true)} aria-label="Chat with MediCare assistant">
           <MessageCircle size={22} />
-          <span>Ask MediCore</span>
+          <span>Ask MediCare</span>
         </button>
       )}
       {open && (
-        <div className="chat-panel" role="dialog" aria-label="MediCore assistant chat">
+        <div className="chat-panel" role="dialog" aria-label="MediCare assistant chat">
           <div className="chat-head">
             <span className="chat-head-icon"><Bot size={18} /></span>
             <span>
-              <strong>MediCore Assistant</strong>
+              <strong>MediCare Assistant</strong>
               <small>Online · replies instantly</small>
             </span>
             <button type="button" className="chat-close" onClick={() => setOpen(false)} aria-label="Close chat">
