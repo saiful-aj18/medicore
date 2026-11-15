@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   Activity,
@@ -25,6 +25,7 @@ import {
 import ChatWidget from "../components/ChatWidget";
 import { doctors } from "../data/hospital";
 import { stats } from "../data/dashboard";
+import { initLandingAnimations } from "../lib/landing-animations";
 
 const SERVICES = [
   { icon: HeartPulse, name: "Cardiology", desc: "Heart check-ups, ECG, blood pressure and follow-up care." },
@@ -58,6 +59,14 @@ export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const topDoctors = doctors.filter((d) => d.status === "On Duty").slice(0, 4);
+
+  useEffect(() => {
+    let cleanup;
+    initLandingAnimations().then((fn) => {
+      cleanup = fn;
+    });
+    return () => cleanup?.();
+  }, []);
 
   return (
     <div className="landing">
@@ -126,7 +135,7 @@ export default function LandingPage() {
       </section>
 
       <section className="landing-rated" aria-label="Patient rating">
-        <div className="landing-rated-inner">
+        <div className="landing-rated-inner reveal">
           <div className="landing-rated-score">
             <span className="landing-rated-stars">★★★★★</span>
             <b>4.9 out of 5</b>
@@ -142,11 +151,11 @@ export default function LandingPage() {
 
       <section id="services" className="landing-section">
         <p className="eyebrow" style={{ textAlign: "center" }}>Our services</p>
-        <h2>Care for every part of your health</h2>
-        <p className="landing-sub">Six departments, one hospital. Every department has experienced doctors and same-day appointments.</p>
+        <h2 className="reveal">Care for every part of your health</h2>
+        <p className="landing-sub reveal">Six departments, one hospital. Every department has experienced doctors and same-day appointments.</p>
         <div className="landing-grid">
           {SERVICES.map((s) => (
-            <article key={s.name} className="card landing-service">
+            <article key={s.name} className="card landing-service reveal">
               <span className="landing-service-icon"><s.icon size={22} /></span>
               <h3>{s.name}</h3>
               <p>{s.desc}</p>
@@ -158,14 +167,14 @@ export default function LandingPage() {
 
       <section id="how" className="landing-section landing-alt">
         <p className="eyebrow" style={{ textAlign: "center" }}>How it works</p>
-        <h2>Three steps, no waiting line</h2>
+        <h2 className="reveal">Three steps, no waiting line</h2>
         <div className="landing-steps">
           {[
             { n: "1", t: "Pick your doctor", d: "Choose a department and doctor. See fees, rating and next free time." },
             { n: "2", t: "Pick a date & time", d: "Choose from today or the next 6 days, and a time that suits you." },
             { n: "3", t: "Confirm & pay", d: "Pay online with bKash, Nagad or card — or pay cash at the hospital. Get your booking ID." },
           ].map((s) => (
-            <div key={s.n} className="card landing-step">
+            <div key={s.n} className="card landing-step reveal">
               <span className="step" style={{ width: 32, height: 32, fontSize: 15 }}>{s.n}</span>
               <h3>{s.t}</h3>
               <p>{s.d}</p>
@@ -176,10 +185,10 @@ export default function LandingPage() {
 
       <section id="doctors" className="landing-section">
         <p className="eyebrow" style={{ textAlign: "center" }}>Meet our doctors</p>
-        <h2>Experienced doctors, on duty today</h2>
+        <h2 className="reveal">Experienced doctors, on duty today</h2>
         <div className="doctor-grid">
           {topDoctors.map((d) => (
-            <article key={d.name} className="card doctor-card">
+            <article key={d.name} className="card doctor-card reveal">
               <div className="doctor-top">
                 <img src={d.image} alt={d.name} className="doctor-photo" loading="lazy" />
                 <div><h3>{d.name}</h3><p>{d.specialty}</p></div>
@@ -198,10 +207,10 @@ export default function LandingPage() {
 
       <section className="landing-section landing-alt">
         <p className="eyebrow" style={{ textAlign: "center" }}><Sparkles size={13} style={{ verticalAlign: "-2px" }} /> Health tips</p>
-        <h2>Stay healthy, stay informed</h2>
+        <h2 className="reveal">Stay healthy, stay informed</h2>
         <div className="landing-grid">
           {TIPS.map((t) => (
-            <article key={t.title} className="card landing-service">
+            <article key={t.title} className="card landing-service reveal">
               <span className="badge onduty">{t.tag}</span>
               <h3 style={{ marginTop: 10 }}>{t.title}</h3>
               <p>{t.text}</p>
@@ -212,10 +221,10 @@ export default function LandingPage() {
 
       <section className="landing-section">
         <p className="eyebrow" style={{ textAlign: "center" }}>What patients say</p>
-        <h2>Trusted by families across Dhaka</h2>
+        <h2 className="reveal">Trusted by families across Dhaka</h2>
         <div className="landing-grid">
           {TESTIMONIALS.map((t) => (
-            <article key={t.name} className="card landing-service">
+            <article key={t.name} className="card landing-service reveal">
               <p style={{ fontSize: 15, lineHeight: 1.6 }}>“{t.text}”</p>
               <p style={{ fontWeight: 700, margin: "12px 0 0" }}>— {t.name}</p>
               <p style={{ color: "#f59e0b", margin: "2px 0 0" }}>★★★★★</p>
@@ -226,10 +235,10 @@ export default function LandingPage() {
 
       <section id="faq" className="landing-section landing-faq">
         <p className="eyebrow" style={{ textAlign: "center" }}>Questions</p>
-        <h2>Frequently asked questions</h2>
+        <h2 className="reveal">Frequently asked questions</h2>
         <div className="faq-list">
           {FAQS.map((f, i) => (
-            <div key={f.q} className="card faq-item">
+            <div key={f.q} className="card faq-item reveal">
               <button type="button" onClick={() => setOpenFaq(openFaq === i ? -1 : i)} aria-expanded={openFaq === i}>
                 {f.q} <ChevronDown size={17} style={{ transform: openFaq === i ? "rotate(180deg)" : "none", transition: "transform .15s" }} />
               </button>
@@ -239,7 +248,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      <section className="landing-cta">
+      <section className="landing-cta reveal">
         <h2>Need a doctor today?</h2>
         <p>Appointments are open right now — book in under a minute.</p>
         <Link href="/book" className="btn-primary" style={{ padding: "13px 26px", background: "#fff", color: "var(--teal)" }}>

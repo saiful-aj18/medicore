@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcryptjs": "^3.0.3",
+    "gsap": "^3.15.1",
     "jose": "^6.2.17",
     "lucide-react": "^0.469.0",
     "mongoose": "^9.12.1",
@@ -10,8 +11,6 @@
   },
   "name": "medicore-hospital-ops",
   "private": true,
-  "type": "module",
-
   "scripts": {
     "build": "node --max-old-space-size=3072 node_modules/next/dist/bin/next build",
     "dev": "next dev",
@@ -22,5 +21,6 @@
   "version": "1.0.0",
   "devDependencies": {
     "mongodb-memory-server": "^11.3.0"
-  }
+  },
+  "type": "module"
 }
