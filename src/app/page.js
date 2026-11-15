@@ -93,6 +93,7 @@ export default function LandingPage() {
       )}
 
       <section className="landing-hero">
+        <div className="landing-hero-inner">
         <div className="landing-hero-text">
           <p className="eyebrow">Dhaka · Open 8 AM – 10 PM · Emergency 24/7</p>
           <h1>Good health starts with the right doctor, at the right time.</h1>
@@ -120,6 +121,7 @@ export default function LandingPage() {
             <span><b>Emergency?</b> Come straight in or call the hospital — Emergency is open 24/7.</span>
           </div>
           <Link href="/book" className="btn-primary" style={{ display: "block", textAlign: "center", marginTop: 14 }}>See doctors &amp; book →</Link>
+        </div>
         </div>
       </section>
 

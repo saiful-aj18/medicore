@@ -644,8 +644,16 @@ html.dark .book-summary > div { border-color: #1e3a35; }
 .landing-links a:hover { color: var(--teal); }
 .landing-nav-actions { margin-left: auto; display: flex; align-items: center; gap: 16px; }
 .landing-hero {
+  /* Banner-type photo behind the hero text; the white overlay keeps
+     the writing readable, fading out to the right so the photo shows. */
+  background:
+    linear-gradient(90deg, rgba(255,255,255,0.97) 0%, rgba(255,255,255,0.90) 42%, rgba(255,255,255,0.62) 75%, rgba(255,255,255,0.45) 100%),
+    url("https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1800&q=80") center / cover no-repeat;
+  padding: 64px 28px 56px;
+}
+.landing-hero-inner {
   display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 36px;
-  max-width: 1180px; margin: 0 auto; padding: 64px 28px 56px; align-items: center;
+  max-width: 1180px; margin: 0 auto; align-items: center;
 }
 .landing-hero h1 { margin: 0 0 16px; font-size: 46px; line-height: 1.12; letter-spacing: -0.025em; font-weight: 850; }
 .landing-hero-text > p { font-size: 16px; line-height: 1.65; color: var(--muted); max-width: 520px; }
@@ -812,7 +820,14 @@ html.dark .landing-emergency { background: #3d1f1e; color: #fca5a5; }
 .landing-mobile-links a:last-child { border-bottom: 0; }
 
 @media (max-width: 900px) {
-  .landing-hero { grid-template-columns: 1fr; padding: 44px 20px 40px; }
+  .landing-hero {
+    padding: 44px 20px 40px;
+    /* Even white overlay on phones so the text stays readable. */
+    background:
+      linear-gradient(rgba(255,255,255,0.93), rgba(255,255,255,0.93)),
+      url("https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1200&q=80") center / cover no-repeat;
+  }
+  .landing-hero-inner { grid-template-columns: 1fr; }
   .landing-hero h1 { font-size: 33px; }
   .landing-grid, .landing-steps { grid-template-columns: 1fr; }
   .landing-links { display: none; }
