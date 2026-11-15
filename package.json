@@ -10,6 +10,8 @@
   },
   "name": "medicore-hospital-ops",
   "private": true,
+  "type": "module",
+
   "scripts": {
     "build": "node --max-old-space-size=3072 node_modules/next/dist/bin/next build",
     "dev": "next dev",

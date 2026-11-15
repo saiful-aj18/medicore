@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Build with a single worker process: on low-RAM Windows PCs the
+  // default multi-worker static generation can fail with
+  // "spawn UNKNOWN" (Windows blocks the extra processes).
+  experimental: {
+    cpus: 1,
+  },
   async headers() {
     return [
       {
