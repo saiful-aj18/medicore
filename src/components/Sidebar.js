@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -32,6 +33,27 @@ const NAV = [
 export default function Sidebar({ open = false, onClose = () => {} }) {
   const pathname = usePathname() || "/";
   const router = useRouter();
+
+  // Show the signed-in staff member, not a fixed name.
+  const [user, setUser] = useState(null);
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.user) setUser(data.user);
+      })
+      .catch(() => {});
+  }, []);
+  const name = user?.name || "Dr. Johnson";
+  const roleLabel = user?.role === "doctor" ? "Doctor" : "Administrator";
+  const initials =
+    name
+      .replace(/^Dr\.\s*/, "")
+      .split(" ")
+      .map((w) => w[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase() || "DJ";
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" }).catch(() => {});
@@ -77,11 +99,11 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
       </div>
 
       <div className="sidebar-user">
-        <span className="avatar small">DJ</span>
+        <span className="avatar small">{initials}</span>
         <span>
-          <span className="name">Dr. Johnson</span>
+          <span className="name">{name}</span>
           <br />
-          <span className="role">Administrator</span>
+          <span className="role">{roleLabel}</span>
         </span>
         <button type="button" className="logout-btn" onClick={logout} aria-label="Log out" title="Log out">
           <LogOut size={16} />

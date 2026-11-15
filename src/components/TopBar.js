@@ -29,8 +29,10 @@ export default function TopBar({ onMenuClick }) {
 
   function onSearch(event) {
     event.preventDefault();
-    // Global search goes to Patients, the page that lists people.
-    router.push("/patients");
+    // Global search goes to Patients, the page that lists people —
+    // carry the query along in the URL so the list is actually filtered.
+    const q = query.trim();
+    router.push(q ? `/patients?q=${encodeURIComponent(q)}` : "/patients");
   }
 
   return (

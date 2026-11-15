@@ -9,7 +9,7 @@ export const stats = [
     noteTone: "up",
   },
   {
-    label: "Available beds",
+    label: "Occupied beds",
     value: "86",
     note: "of 120 total beds",
     noteTone: "muted",

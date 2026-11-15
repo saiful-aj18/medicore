@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import DashboardShell from "../../components/DashboardShell";
 import PageHeader, { avatarColor, initials } from "../../components/PageHeader";
 import { patients as seedPatients } from "../../data/hospital";
@@ -13,9 +14,15 @@ function statusClass(status) {
   return status.toLowerCase();
 }
 
-export default function PatientsPage() {
+function PatientsContent() {
+  const searchParams = useSearchParams();
   const [list, setList] = useState(seedPatients);
-  const [query, setQuery] = useState("");
+  // Start filtered when the top-bar global search sent a ?q= query,
+  // and pick up a new query if the user searches again while already here.
+  const [query, setQuery] = useState(() => searchParams.get("q") || "");
+  useEffect(() => {
+    setQuery(searchParams.get("q") || "");
+  }, [searchParams]);
   const [dept, setDept] = useState("All");
   const [status, setStatus] = useState("All");
   const [showForm, setShowForm] = useState(false);
@@ -232,5 +239,14 @@ export default function PatientsPage() {
         </div>
       )}
     </DashboardShell>
+  );
+}
+
+// useSearchParams needs a Suspense boundary (Next.js App Router).
+export default function PatientsPage() {
+  return (
+    <Suspense>
+      <PatientsContent />
+    </Suspense>
   );
 }

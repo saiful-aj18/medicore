@@ -173,6 +173,9 @@ export default function BookPage() {
     e.preventDefault();
     const q = lookup.trim().toLowerCase();
     if (!q) return;
+    // Clear the previous result right away — a failed search must never
+    // leave the old booking on screen.
+    setLookupResult(undefined);
     // Ask the database first (works from any device); fall back to this
     // browser's bookings in demo mode.
     try {

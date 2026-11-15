@@ -68,7 +68,7 @@ export default function BedsPage() {
       <PageHeader
         eyebrow="Hospital OPS"
         title="Bed management"
-        description={`${occupied} of ${total} beds occupied (${Math.round((occupied / total) * 100)}%) · 34 beds free right now.`}
+        description={`${occupied} of ${total} beds occupied (${Math.round((occupied / total) * 100)}%) · ${total - occupied} beds free right now.`}
       />
 
       <div className="toolbar">

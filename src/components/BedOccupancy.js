@@ -1,7 +1,35 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { bedOccupancy } from "../data/dashboard";
 
 export default function BedOccupancy() {
-  const { percent, occupied, available, wards } = bedOccupancy;
+  // Beds come live from the API so the donut always agrees with the
+  // Bed management page; the fixed numbers are the fallback.
+  const [live, setLive] = useState(null);
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/beds")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (!cancelled && data?.wards?.length) {
+          const occupied = data.wards.reduce((s, w) => s + (w.occupied || 0), 0);
+          const total = data.wards.reduce((s, w) => s + (w.total || 0), 0);
+          setLive({
+            percent: total ? Math.round((occupied / total) * 100) : 0,
+            occupied,
+            available: total - occupied,
+            wards: data.wards.map((w) => ({ label: w.name, value: `${w.occupied}/${w.total}` })),
+          });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const { percent, occupied, available, wards } = live || bedOccupancy;
   const R = 52;
   const C = 2 * Math.PI * R;
   const filled = (percent / 100) * C;

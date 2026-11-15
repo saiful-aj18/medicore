@@ -62,7 +62,7 @@ export default function PharmacyPage() {
       <PageHeader
         eyebrow="Hospital OPS"
         title="Pharmacy"
-        description={`${list.length} medicines tracked · ${lowCount} need reordering — 3 medicines are running low.`}
+        description={`${list.length} medicines tracked · ${lowCount} medicine${lowCount === 1 ? "" : "s"} running low.`}
       />
 
       <div className="toolbar">
