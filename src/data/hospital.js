@@ -15,15 +15,21 @@ export const patients = [
 ];
 
 export const doctors = [
-  { name: "Dr. James Wilson", specialty: "Cardiology", experience: "14 yrs", patientsToday: 12, rating: 4.9, status: "On Duty", nextFree: "02:00 PM" },
-  { name: "Dr. Emily Davis", specialty: "Neurology", experience: "11 yrs", patientsToday: 9, rating: 4.8, status: "On Duty", nextFree: "03:30 PM" },
-  { name: "Dr. Michael Brown", specialty: "Orthopedics", experience: "16 yrs", patientsToday: 10, rating: 4.7, status: "On Duty", nextFree: "01:00 PM" },
-  { name: "Dr. Robert Lee", specialty: "General Medicine", experience: "9 yrs", patientsToday: 14, rating: 4.8, status: "On Duty", nextFree: "04:00 PM" },
-  { name: "Dr. Sarah Chen", specialty: "Pediatrics", experience: "8 yrs", patientsToday: 11, rating: 4.9, status: "On Duty", nextFree: "02:30 PM" },
-  { name: "Dr. Ahmed Khan", specialty: "Emergency", experience: "12 yrs", patientsToday: 18, rating: 4.6, status: "On Duty", nextFree: "06:00 PM" },
-  { name: "Dr. Priya Sharma", specialty: "Cardiology", experience: "7 yrs", patientsToday: 8, rating: 4.8, status: "Off Duty", nextFree: "Tomorrow 09:00 AM" },
-  { name: "Dr. David Kim", specialty: "Neurology", experience: "10 yrs", patientsToday: 0, rating: 4.7, status: "On Leave", nextFree: "Mon, Nov 17" },
+  { name: "Dr. James Wilson", specialty: "Cardiology", experience: "14 yrs", patientsToday: 12, rating: 4.9, status: "On Duty", nextFree: "02:00 PM", image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=200&h=200&q=80" },
+  { name: "Dr. Emily Davis", specialty: "Neurology", experience: "11 yrs", patientsToday: 9, rating: 4.8, status: "On Duty", nextFree: "03:30 PM", image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=200&h=200&q=80" },
+  { name: "Dr. Michael Brown", specialty: "Orthopedics", experience: "16 yrs", patientsToday: 10, rating: 4.7, status: "On Duty", nextFree: "01:00 PM", image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=200&h=200&q=80" },
+  { name: "Dr. Robert Lee", specialty: "General Medicine", experience: "9 yrs", patientsToday: 14, rating: 4.8, status: "On Duty", nextFree: "04:00 PM", image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&w=200&h=200&q=80" },
+  { name: "Dr. Sarah Chen", specialty: "Pediatrics", experience: "8 yrs", patientsToday: 11, rating: 4.9, status: "On Duty", nextFree: "02:30 PM", image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&w=200&h=200&q=80" },
+  { name: "Dr. Ahmed Khan", specialty: "Emergency", experience: "12 yrs", patientsToday: 18, rating: 4.6, status: "On Duty", nextFree: "06:00 PM", image: "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&w=200&h=200&q=80" },
+  { name: "Dr. Priya Sharma", specialty: "Cardiology", experience: "7 yrs", patientsToday: 8, rating: 4.8, status: "Off Duty", nextFree: "Tomorrow 09:00 AM", image: "https://images.unsplash.com/photo-1638202993928-7267aad84c31?auto=format&fit=crop&w=200&h=200&q=80" },
+  { name: "Dr. David Kim", specialty: "Neurology", experience: "10 yrs", patientsToday: 0, rating: 4.7, status: "On Leave", nextFree: "Mon, Nov 17", image: "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&w=200&h=200&q=80" },
 ];
+
+// Doctor photos by name — the OPS pages load doctors from the API/DB,
+// which has no image field, so resolve the photo from this list instead.
+export function doctorPhoto(name) {
+  return doctors.find((d) => d.name === name)?.image;
+}
 
 export const allAppointments = [
   { time: "09:00 AM", patient: "John Smith", department: "Cardiology", doctor: "Dr. James Wilson", type: "Follow-up", status: "Completed" },

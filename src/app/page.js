@@ -25,7 +25,6 @@ import {
 import ChatWidget from "../components/ChatWidget";
 import { doctors } from "../data/hospital";
 import { stats } from "../data/dashboard";
-import { avatarColor, initials } from "../components/PageHeader";
 
 const SERVICES = [
   { icon: HeartPulse, name: "Cardiology", desc: "Heart check-ups, ECG, blood pressure and follow-up care." },
@@ -124,6 +123,21 @@ export default function LandingPage() {
         </div>
       </section>
 
+      <section className="landing-rated" aria-label="Patient rating">
+        <div className="landing-rated-inner">
+          <div className="landing-rated-score">
+            <span className="landing-rated-stars">★★★★★</span>
+            <b>4.9 out of 5</b>
+            <span>Rated by {stats[0].value} patients across Dhaka</span>
+          </div>
+          <div className="landing-rated-points">
+            <span>✓ 98% would recommend us</span>
+            <span>✓ Same-day appointments</span>
+            <span>✓ Emergency open 24/7</span>
+          </div>
+        </div>
+      </section>
+
       <section id="services" className="landing-section">
         <p className="eyebrow" style={{ textAlign: "center" }}>Our services</p>
         <h2>Care for every part of your health</h2>
@@ -165,7 +179,7 @@ export default function LandingPage() {
           {topDoctors.map((d) => (
             <article key={d.name} className="card doctor-card">
               <div className="doctor-top">
-                <span className="avatar" style={{ background: avatarColor(d.name) }}>{initials(d.name.replace("Dr. ", ""))}</span>
+                <img src={d.image} alt={d.name} className="doctor-photo" loading="lazy" />
                 <div><h3>{d.name}</h3><p>{d.specialty}</p></div>
               </div>
               <div className="doctor-meta"><span>Experience</span><b>{d.experience}</b></div>

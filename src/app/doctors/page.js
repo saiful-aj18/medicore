@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import DashboardShell from "../../components/DashboardShell";
 import PageHeader, { avatarColor, initials } from "../../components/PageHeader";
-import { doctors as seedDoctors } from "../../data/hospital";
+import { doctors as seedDoctors, doctorPhoto } from "../../data/hospital";
 
 const SPECIALTIES = ["All", "Cardiology", "Neurology", "Orthopedics", "General Medicine", "Pediatrics", "Emergency"];
 const STATUSES = ["All", "On Duty", "Off Duty", "On Leave"];
@@ -79,9 +79,13 @@ export default function DoctorsPage() {
         {filtered.map((d) => (
           <article key={d.name} className="card doctor-card">
             <div className="doctor-top">
-              <span className="avatar" style={{ background: avatarColor(d.name) }}>
-                {initials(d.name.replace("Dr. ", ""))}
-              </span>
+              {doctorPhoto(d.name) ? (
+                <img src={doctorPhoto(d.name)} alt={d.name} className="doctor-photo" loading="lazy" />
+              ) : (
+                <span className="avatar" style={{ background: avatarColor(d.name) }}>
+                  {initials(d.name.replace("Dr. ", ""))}
+                </span>
+              )}
               <div>
                 <h3>{d.name}</h3>
                 <p>{d.specialty}</p>

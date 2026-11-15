@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { CalendarCheck, CheckCircle2, Clock, MapPin, Phone, Search, Stethoscope } from "lucide-react";
-import { doctors as seedDoctors } from "../../data/hospital";
+import { doctors as seedDoctors, doctorPhoto } from "../../data/hospital";
 import { avatarColor, initials } from "../../components/PageHeader";
 import ChatWidget from "../../components/ChatWidget";
 
@@ -281,7 +281,11 @@ export default function BookPage() {
                         onClick={() => setDoctor(d)}
                       >
                         <span className="doctor-top">
-                          <span className="avatar" style={{ background: avatarColor(d.name) }}>{initials(d.name.replace("Dr. ", ""))}</span>
+                          {doctorPhoto(d.name) ? (
+                            <img src={doctorPhoto(d.name)} alt={d.name} className="doctor-photo" loading="lazy" />
+                          ) : (
+                            <span className="avatar" style={{ background: avatarColor(d.name) }}>{initials(d.name.replace("Dr. ", ""))}</span>
+                          )}
                           <span style={{ textAlign: "left" }}>
                             <h3>{d.name}</h3>
                             <p>{d.specialty} · {d.experience} exp.</p>
