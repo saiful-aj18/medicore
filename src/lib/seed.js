@@ -3,7 +3,7 @@
 // Safe to call on every API request — it only inserts when a collection
 // is empty. Also seeds the two demo staff accounts.
 
-import { dbConnect } from "./mongodb";
+import { dbConnect } from "./mongodb.js";
 import {
   Appointment,
   Doctor,
@@ -12,7 +12,7 @@ import {
   Patient,
   StaffUser,
   Ward,
-} from "./models";
+} from "./models.js";
 import {
   allAppointments,
   doctors,
@@ -20,8 +20,8 @@ import {
   medicines,
   patients,
   wards,
-} from "../data/hospital";
-import { users } from "./users";
+} from "../data/hospital.js";
+import { users } from "./users.js";
 
 function bedStatus(index, occupiedCount) {
   if (index < occupiedCount) return "occupied";

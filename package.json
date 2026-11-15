@@ -4,14 +4,14 @@
     "jose": "^6.2.17",
     "lucide-react": "^0.469.0",
     "mongoose": "^9.12.1",
-    "next": "^15.1.0",
+    "next": "^15.5.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "name": "medicore-hospital-ops",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build": "node --max-old-space-size=3072 node_modules/next/dist/bin/next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
