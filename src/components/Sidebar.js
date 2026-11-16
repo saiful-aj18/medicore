@@ -17,17 +17,22 @@ import {
   Users,
 } from "lucide-react";
 
+// Every staff member sees only the pages their role may open.
+// Admin: the full hospital OPS area (10 items).
+// Doctor: just their own work — Dashboard, My Patients, My Schedule,
+// Patient Booking and Settings (5 items). The labels switch to the
+// doctor's wording ("My Patients", "My Schedule") for their own pages.
 const NAV = [
-  { label: "Dashboard", href: "/dashboard", icon: Home },
-  { label: "Patients", href: "/patients", icon: Users },
-  { label: "Doctors", href: "/doctors", icon: Stethoscope },
-  { label: "Appointments", href: "/appointments", icon: CalendarDays },
-  { label: "Bed management", href: "/beds", icon: BedDouble },
-  { label: "Emergency", href: "/emergency", icon: Siren },
-  { label: "Pharmacy", href: "/pharmacy", icon: Activity },
-  { label: "Analytics", href: "/analytics", icon: BarChart3 },
-  { label: "Patient Booking", href: "/book", icon: CalendarCheck },
-  { label: "Settings", href: "/settings", icon: Settings },
+  { label: "Dashboard", href: "/dashboard", icon: Home, roles: ["admin", "doctor"] },
+  { label: "Patients", href: "/patients", icon: Users, roles: ["admin", "doctor"], doctorLabel: "My Patients" },
+  { label: "Doctors", href: "/doctors", icon: Stethoscope, roles: ["admin"] },
+  { label: "Appointments", href: "/appointments", icon: CalendarDays, roles: ["admin", "doctor"], doctorLabel: "My Schedule" },
+  { label: "Bed management", href: "/beds", icon: BedDouble, roles: ["admin"] },
+  { label: "Emergency", href: "/emergency", icon: Siren, roles: ["admin"] },
+  { label: "Pharmacy", href: "/pharmacy", icon: Activity, roles: ["admin"] },
+  { label: "Analytics", href: "/analytics", icon: BarChart3, roles: ["admin"] },
+  { label: "Patient Booking", href: "/book", icon: CalendarCheck, roles: ["admin", "doctor"] },
+  { label: "Settings", href: "/settings", icon: Settings, roles: ["admin", "doctor"] },
 ];
 
 export default function Sidebar({ open = false, onClose = () => {} }) {
@@ -73,21 +78,24 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
       </div>
 
       <nav className="nav" aria-label="Main navigation">
-        {NAV.map(({ label, href, icon: Icon }) => {
-          const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-          return (
-            <Link
-              key={href}
-              href={href}
-              onClick={onClose}
-              className={`nav-item${active ? " active" : ""}`}
-              aria-current={active ? "page" : undefined}
-            >
-              <Icon size={18} />
-              {label}
-            </Link>
-          );
-        })}
+        {NAV.filter((item) => item.roles.includes(user?.role || "admin")).map(
+          ({ label, href, icon: Icon, doctorLabel }) => {
+            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
+            const text = user?.role === "doctor" && doctorLabel ? doctorLabel : label;
+            return (
+              <Link
+                key={href}
+                href={href}
+                onClick={onClose}
+                className={`nav-item${active ? " active" : ""}`}
+                aria-current={active ? "page" : undefined}
+              >
+                <Icon size={18} />
+                {text}
+              </Link>
+            );
+          }
+        )}
       </nav>
 
       <div className="help-card">

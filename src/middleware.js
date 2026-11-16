@@ -15,6 +15,17 @@ const PROTECTED = [
   "/settings",
 ];
 
+// Pages only an admin may open. A doctor gets a smaller set —
+// Dashboard, My Patients, Appointments and the public /book page —
+// so a doctor never sees the full hospital admin area.
+const ADMIN_ONLY = [
+  "/doctors",
+  "/beds",
+  "/emergency",
+  "/pharmacy",
+  "/analytics",
+];
+
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
   const isProtected = PROTECTED.some(
@@ -29,6 +40,18 @@ export async function middleware(request) {
     loginUrl.searchParams.set("next", pathname);
     return NextResponse.redirect(loginUrl);
   }
+
+  // Role check: a doctor who types an admin-only address is sent
+  // back to their own dashboard instead of opening the page.
+  if (session.role === "doctor") {
+    const isAdminOnly = ADMIN_ONLY.some(
+      (p) => pathname === p || pathname.startsWith(p + "/")
+    );
+    if (isAdminOnly) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
+  }
+
   return NextResponse.next();
 }
 

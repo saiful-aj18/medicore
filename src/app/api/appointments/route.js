@@ -1,14 +1,33 @@
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { cookies } from "next/headers";
 import { dbConnect, isDbConfigured } from "@/lib/mongodb";
 import { Appointment } from "@/lib/models";
 import { ensureSeeded, toPlainList } from "@/lib/seed";
 import { allAppointments as seedAppointments } from "@/data/hospital";
+import { COOKIE_NAME, verifySession } from "@/lib/auth";
+
+// Who is calling — a doctor only ever gets their own appointments.
+async function getSession() {
+  const token = (await cookies()).get(COOKIE_NAME)?.value;
+  return token ? verifySession(token) : null;
+}
+
+function scopeForDoctor(appointments, session) {
+  if (session?.role === "doctor" && session?.name) {
+    return appointments.filter((a) => a.doctor === session.name);
+  }
+  return appointments;
+}
 
 // GET /api/appointments?search= — list appointments, newest first.
 // ?search= matches booking ID, phone or patient name (status check page).
+// A doctor only receives their own appointments. Note: the public
+// /book status check uses ?search=, so a search still works for a
+// patient looking up their own booking.
 export async function GET(request) {
   const search = new URL(request.url).searchParams.get("search")?.trim() || "";
+  const session = await getSession();
   if (!isDbConfigured() || !(await dbConnect())) {
     const list = seedAppointments.map((a) => ({
       ...a, date: "Today", source: "Walk-in", id: `seed:${a.time}:${a.patient}`,
@@ -16,7 +35,10 @@ export async function GET(request) {
     const filtered = search
       ? list.filter((a) => a.patient.toLowerCase().includes(search.toLowerCase()))
       : list;
-    return NextResponse.json({ mode: "demo", appointments: filtered });
+    // A plain staff list (no ?search=) is scoped to the doctor's own
+    // appointments; a ?search= lookup is left alone so patients can
+    // still check their booking status on /book.
+    return NextResponse.json({ mode: "demo", appointments: search ? filtered : scopeForDoctor(filtered, session) });
   }
   await ensureSeeded();
   const query = {};
@@ -25,7 +47,8 @@ export async function GET(request) {
     query.$or = [{ bookingId: rx }, { phone: rx }, { patient: rx }];
   }
   const docs = await Appointment.find(query).sort({ createdAt: -1 }).lean();
-  return NextResponse.json({ mode: "db", appointments: toPlainList(docs) });
+  const appointments = toPlainList(docs);
+  return NextResponse.json({ mode: "db", appointments: search ? appointments : scopeForDoctor(appointments, session) });
 }
 
 // POST /api/appointments — create a booking (public /book page) or a
@@ -67,6 +90,7 @@ export async function POST(request) {
 
 // PATCH /api/appointments { id, patient, time, status } — Complete/Cancel.
 // id can be a Mongo _id, a bookingId (MC-1234), or a seed id.
+// A doctor may only change the status of their own appointments.
 export async function PATCH(request) {
   if (!isDbConfigured() || !(await dbConnect())) {
     return NextResponse.json({ error: "Database not configured. Set MONGODB_URI." }, { status: 503 });
@@ -84,6 +108,13 @@ export async function PATCH(request) {
   }
   if (!doc && patient && time) doc = await Appointment.findOne({ patient, time });
   if (!doc) return NextResponse.json({ error: "Appointment not found." }, { status: 404 });
+  const session = await getSession();
+  if (session?.role === "doctor" && session?.name && doc.doctor !== session.name) {
+    return NextResponse.json(
+      { error: "A doctor may only update their own appointments." },
+      { status: 403 }
+    );
+  }
   doc.status = status;
   await doc.save();
   return NextResponse.json({ mode: "db", appointment: doc.toObject() });

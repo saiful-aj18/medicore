@@ -5,7 +5,7 @@ export default function Appointments() {
     <section className="card span-4">
       <div className="card-head">
         <h2>Today&apos;s appointments</h2>
-        <a className="link-muted" href="#">
+        <a className="link-muted" href="/appointments">
           View All
         </a>
       </div>

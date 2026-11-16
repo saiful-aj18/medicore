@@ -5,7 +5,7 @@ export default function EmergencyAlerts() {
     <section className="card alerts-card span-4">
       <div className="card-head">
         <h2>Emergency Alerts</h2>
-        <a className="link-muted" href="#">
+        <a className="link-muted" href="/emergency">
           View All
         </a>
       </div>

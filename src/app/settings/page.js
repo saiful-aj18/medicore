@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardShell from "../../components/DashboardShell";
 import PageHeader from "../../components/PageHeader";
 
@@ -18,6 +18,21 @@ export default function SettingsPage() {
   const [hospital, setHospital] = useState("MediCare General Hospital");
   const [toggles, setToggles] = useState({ icu: true, stock: true, emergency: true, followup: false });
   const [saved, setSaved] = useState("");
+
+  // Show the signed-in staff member's own profile, not a fixed name —
+  // a doctor sees their own name, role and email here.
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.user) {
+          setName(data.user.name);
+          setRole(data.user.role === "doctor" ? "Doctor" : "Administrator");
+          setEmail(data.user.email);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   function save(e) {
     e.preventDefault();

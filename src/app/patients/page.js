@@ -17,6 +17,18 @@ function statusClass(status) {
 function PatientsContent() {
   const searchParams = useSearchParams();
   const [list, setList] = useState(seedPatients);
+  // Who is signed in — a doctor only ever sees their own patients,
+  // and never gets the Admit button (admitting is an admin job).
+  const [me, setMe] = useState(null);
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.user) setMe(data.user);
+      })
+      .catch(() => {});
+  }, []);
+  const isDoctor = me?.role === "doctor";
   // Start filtered when the top-bar global search sent a ?q= query,
   // and pick up a new query if the user searches again while already here.
   const [query, setQuery] = useState(() => searchParams.get("q") || "");
@@ -50,6 +62,8 @@ function PatientsContent() {
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return list.filter((p) => {
+      // A doctor only sees patients assigned to them by name.
+      if (isDoctor && me?.name && p.doctor !== me.name) return false;
       const matchesQuery =
         !q ||
         p.name.toLowerCase().includes(q) ||
@@ -59,7 +73,7 @@ function PatientsContent() {
       const matchesStatus = status === "All" || p.status === status;
       return matchesQuery && matchesDept && matchesStatus;
     });
-  }, [list, query, dept, status]);
+  }, [list, query, dept, status, isDoctor, me?.name]);
 
   async function addPatient(e) {
     e.preventDefault();
@@ -99,16 +113,26 @@ function PatientsContent() {
     setForm({ name: "", age: "", gender: "Male", department: "Cardiology", doctor: "Dr. James Wilson", condition: "" });
   }
 
+  // A doctor's list is their own patients only, so the counts and
+  // the header describe that list — not the whole hospital.
+  const shownCritical = filtered.filter((p) => p.status === "Critical").length;
+
   return (
     <DashboardShell>
       <PageHeader
         eyebrow="Hospital OPS"
-        title="Patients"
-        description={`${list.length} patients on record · ${list.filter((p) => p.status === "Critical").length} critical · search, filter or admit a new patient.`}
+        title={isDoctor ? "My Patients" : "Patients"}
+        description={
+          isDoctor
+            ? `${filtered.length} patients under your care · ${shownCritical} critical.`
+            : `${list.length} patients on record · ${list.filter((p) => p.status === "Critical").length} critical · search, filter or admit a new patient.`
+        }
         action={
-          <button type="button" className="btn-primary" onClick={() => setShowForm(true)}>
-            + Admit Patient
-          </button>
+          isDoctor ? null : (
+            <button type="button" className="btn-primary" onClick={() => setShowForm(true)}>
+              + Admit Patient
+            </button>
+          )
         }
       />
 
@@ -122,7 +146,7 @@ function PatientsContent() {
         ))}
         <article className="card stat span-4">
           <p className="label">Critical patients</p>
-          <p className="value danger">{list.filter((p) => p.status === "Critical").length}</p>
+          <p className="value danger">{shownCritical}</p>
           <p className="note danger">Needs immediate attention</p>
         </article>
       </div>

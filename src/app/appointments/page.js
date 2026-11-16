@@ -10,6 +10,17 @@ const STATUSES = ["All", "Upcoming", "Completed", "Cancelled"];
 export default function AppointmentsPage() {
   const [list, setList] = useState(allAppointments);
   const [status, setStatus] = useState("All");
+  // Who is signed in — a doctor only ever sees their own appointments.
+  const [me, setMe] = useState(null);
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.user) setMe(data.user);
+      })
+      .catch(() => {});
+  }, []);
+  const isDoctor = me?.role === "doctor";
 
   // Load from MongoDB when connected — online bookings made on /book
   // show up here for every staff member. Without a database, fall back
@@ -67,10 +78,11 @@ export default function AppointmentsPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const filtered = useMemo(
-    () => (status === "All" ? list : list.filter((a) => a.status === status)),
-    [list, status]
-  );
+  const filtered = useMemo(() => {
+    // A doctor only sees appointments assigned to them by name.
+    const mine = isDoctor && me?.name ? list.filter((a) => a.doctor === me.name) : list;
+    return status === "All" ? mine : mine.filter((a) => a.status === status);
+  }, [list, status, isDoctor, me?.name]);
 
   async function setAppointmentStatus(patient, time, next) {
     setList((cur) =>
@@ -90,19 +102,26 @@ export default function AppointmentsPage() {
     }
   }
 
+  // Counts describe the appointments this staff member can see —
+  // for a doctor, only their own schedule.
+  const visible = isDoctor && me?.name ? list.filter((a) => a.doctor === me.name) : list;
   const counts = {
-    total: list.length,
-    upcoming: list.filter((a) => a.status === "Upcoming").length,
-    completed: list.filter((a) => a.status === "Completed").length,
-    cancelled: list.filter((a) => a.status === "Cancelled").length,
+    total: visible.length,
+    upcoming: visible.filter((a) => a.status === "Upcoming").length,
+    completed: visible.filter((a) => a.status === "Completed").length,
+    cancelled: visible.filter((a) => a.status === "Cancelled").length,
   };
 
   return (
     <DashboardShell>
       <PageHeader
         eyebrow="Hospital OPS"
-        title="Appointments"
-        description="Today's schedule — confirm, complete or cancel an appointment. Bookings made on the public /book page show up here as “Online”."
+        title={isDoctor ? "My Schedule" : "Appointments"}
+        description={
+          isDoctor
+            ? "Your appointments for today — confirm, complete or cancel your own bookings."
+            : "Today's schedule — confirm, complete or cancel an appointment. Bookings made on the public /book page show up here as “Online”."
+        }
       />
 
       <div className="grid" style={{ marginBottom: 18 }}>
