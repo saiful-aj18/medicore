@@ -2,12 +2,34 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Bell, ChevronDown, Menu, MessageSquareText, Moon, Search, Sun } from "lucide-react";
+import Link from "next/link";
+import { ChevronDown, Menu, Moon, Search, Sun } from "lucide-react";
 
 export default function TopBar({ onMenuClick }) {
   const router = useRouter();
   const [dark, setDark] = useState(false);
   const [query, setQuery] = useState("");
+  // The signed-in staff member's initials — not a fixed "DJ", so a
+  // doctor sees their own initials here.
+  const [initials, setInitials] = useState("DJ");
+  useEffect(() => {
+    fetch("/api/auth/me")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.user?.name) {
+          setInitials(
+            data.user.name
+              .replace(/^Dr\.?\s+/i, "")
+              .split(/\s+/)
+              .map((w) => w[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Apply dark mode on the <html> element and remember the choice.
   useEffect(() => {
@@ -61,19 +83,11 @@ export default function TopBar({ onMenuClick }) {
       >
         {dark ? <Sun size={18} /> : <Moon size={18} />}
       </button>
-      <button type="button" className="icon-btn" aria-label="Notifications">
-        <Bell size={18} />
-        <span className="dot" />
-      </button>
-      <button type="button" className="icon-btn" aria-label="Messages">
-        <MessageSquareText size={18} />
-        <span className="dot" />
-      </button>
 
-      <span className="topbar-user">
-        <span className="avatar">DJ</span>
+      <Link href="/settings" className="topbar-user" aria-label="My profile and settings">
+        <span className="avatar">{initials}</span>
         <ChevronDown size={16} />
-      </span>
+      </Link>
     </header>
   );
 }

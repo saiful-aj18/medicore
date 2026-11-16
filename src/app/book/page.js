@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CalendarCheck, CheckCircle2, Clock, MapPin, Phone, Search, Stethoscope } from "lucide-react";
 import { doctors as seedDoctors, doctorPhoto } from "../../data/hospital";
@@ -34,7 +35,11 @@ function nextDays(n) {
   return out;
 }
 
-export default function BookPage() {
+function BookContent() {
+  const searchParams = useSearchParams();
+  // Coming from a doctor's "Book Now" on the home page (?doctor=Name)
+  // pre-selects that doctor instead of opening a blank booking form.
+  const preselectDoctor = searchParams.get("doctor");
   const days = useMemo(() => nextDays(7), []);
   const [dept, setDept] = useState("All");
   const [doctor, setDoctor] = useState(null);
@@ -66,6 +71,19 @@ export default function BookPage() {
       })
       .catch(() => { /* demo mode — keep seed list */ });
   }, []);
+
+  // Pre-select the doctor from ?doctor=Name (home page "Book Now").
+  // Sets the department too, so the doctor is visible in the list.
+  useEffect(() => {
+    if (!preselectDoctor) return;
+    const match = doctorList.find(
+      (d) => d.name.toLowerCase() === preselectDoctor.trim().toLowerCase()
+    );
+    if (match) {
+      setDoctor(match);
+      setDept(match.specialty);
+    }
+  }, [preselectDoctor, doctorList]);
 
   const shownDoctors = useMemo(
     () => doctorList.filter((d) => dept === "All" || d.specialty === dept),
@@ -416,5 +434,14 @@ export default function BookPage() {
       </footer>
       <ChatWidget />
     </div>
+  );
+}
+
+// useSearchParams needs a Suspense boundary (Next.js App Router).
+export default function BookPage() {
+  return (
+    <Suspense>
+      <BookContent />
+    </Suspense>
   );
 }

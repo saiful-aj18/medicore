@@ -198,7 +198,7 @@ export default function LandingPage() {
               <div className="doctor-meta"><span>Next free</span><b>{d.nextFree}</b></div>
               <div className="doctor-foot">
                 <span className="badge onduty">On Duty</span>
-                <Link href="/book" className="btn-small">Book Now</Link>
+                <Link href={`/book?doctor=${encodeURIComponent(d.name)}`} className="btn-small">Book Now</Link>
               </div>
             </article>
           ))}

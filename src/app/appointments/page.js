@@ -3,12 +3,14 @@
 import { useEffect, useMemo, useState } from "react";
 import DashboardShell from "../../components/DashboardShell";
 import PageHeader from "../../components/PageHeader";
-import { allAppointments } from "../../data/hospital";
 
 const STATUSES = ["All", "Upcoming", "Completed", "Cancelled"];
 
 export default function AppointmentsPage() {
-  const [list, setList] = useState(allAppointments);
+  // Start empty — the list is filled from /api/appointments, which
+  // already scopes to the signed-in doctor. Starting from the full seed
+  // list would briefly flash other doctors' patients at a doctor.
+  const [list, setList] = useState([]);
   const [status, setStatus] = useState("All");
   // Who is signed in — a doctor only ever sees their own appointments.
   const [me, setMe] = useState(null);

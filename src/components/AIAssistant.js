@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { aiInsights } from "../data/dashboard";
 
@@ -13,10 +14,10 @@ export default function AIAssistant() {
           <li key={insight}>{insight}</li>
         ))}
       </ul>
-      <button type="button" className="btn-insights">
+      <Link href="/analytics" className="btn-insights">
         View All Insights
         <ChevronRight size={16} />
-      </button>
+      </Link>
     </section>
   );
 }

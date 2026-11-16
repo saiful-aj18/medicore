@@ -36,6 +36,11 @@ export async function GET() {
 // POST /api/patients — admit a patient. Admin only: a doctor may not
 // admit patients. Needs the database; without it the client falls back
 // to saving in the browser.
+// Admitting a patient also books their first appointment with the
+// assigned doctor — otherwise the patient would exist on the Patients
+// list but never appear on the doctor's schedule, which is exactly the
+// confusion that used to happen. The appointment time comes from the
+// form (appointmentTime) and defaults to 10:00 AM.
 export async function POST(request) {
   const session = await getSession();
   if (session?.role === "doctor") {
@@ -51,7 +56,7 @@ export async function POST(request) {
     );
   }
   const body = await request.json().catch(() => ({}));
-  const { name, age, gender, department, doctor, condition, phone } = body;
+  const { name, age, gender, department, doctor, condition, phone, appointmentTime } = body;
   if (!name?.trim() || !age || !department || !doctor) {
     return NextResponse.json({ error: "Name, age, department and doctor are required." }, { status: 400 });
   }
@@ -72,5 +77,26 @@ export async function POST(request) {
   const patient = { ...doc.toObject(), id: doc.patientId };
   delete patient._id;
   delete patient.__v;
+  // First appointment for the new patient, so the assigned doctor sees
+  // them on their schedule right away.
+  const { Appointment } = await import("@/lib/models");
+  await Appointment.create({
+    bookingId: null,
+    time: appointmentTime || "10:00 AM",
+    date: "Today",
+    patient: patient.name,
+    phone: patient.phone || "",
+    age: String(patient.age),
+    department: patient.department,
+    doctor: patient.doctor,
+    type: "Consultation",
+    reason: patient.condition,
+    fee: 0,
+    status: "Upcoming",
+    paymentMethod: "",
+    paymentStatus: "",
+    paymentId: null,
+    source: "Walk-in",
+  });
   return NextResponse.json({ mode: "db", patient }, { status: 201 });
 }

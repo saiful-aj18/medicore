@@ -101,9 +101,9 @@ export default function Sidebar({ open = false, onClose = () => {} }) {
       <div className="help-card">
         <h3>Need help?</h3>
         <p>We&apos;re here 24/7 for anything urgent.</p>
-        <button type="button" className="help-btn">
+        <a className="help-btn" href="mailto:admin@medicare.hospital">
           Contact Support
-        </button>
+        </a>
       </div>
 
       <div className="sidebar-user">
